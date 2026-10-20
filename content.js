@@ -7,8 +7,9 @@ document.addEventListener("keydown", (event) => {
     ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
   if (isTyping) return;
 
-  const destination = getTogglePagesUrl(window.location.href);
-  if (destination) {
-    window.location.href = destination;
-  }
+  togglePagesUrl(window.location.href).then((destination) => {
+    if (destination) {
+      window.location.href = destination;
+    }
+  });
 });

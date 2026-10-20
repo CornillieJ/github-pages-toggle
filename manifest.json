@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "GitHub Pages Toggle",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Press P on a GitHub repo to jump straight to its GitHub Pages site, and back again.",
   "author": "Jeffrey Cornillie",
   "homepage_url": "https://github.com/CornillieJ/github-pages-toggle",
@@ -14,7 +14,8 @@
   },
   "permissions": [
     "activeTab",
-    "tabs"
+    "tabs",
+    "storage"
   ],
   "background": {
     "scripts": ["url-mapper.js", "background.js"],

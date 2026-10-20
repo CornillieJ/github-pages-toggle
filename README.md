@@ -12,15 +12,18 @@ https://github.com/<user>/<repo>            https://<user>.github.io/<repo>
 
 GitHub Pages sites and their source repos live on different domains, so switching
 between "here's the code" and "here's the live site" usually means editing the URL
-by hand. This extension does that instantly, in either direction, keeping the
-current sub-path (e.g. `/blob/main/docs/`) intact where it makes sense.
+by hand. This extension does that instantly, in either direction.
 
 ## Features
 
 - **Press `P`** anywhere on a `github.com` or `*.github.io` page (ignored while
   typing in an input, textarea, or editable field) to toggle to the matching page.
 - **Click the toolbar icon** to do the same without touching the keyboard.
-- Preserves the path, query string, and hash when toggling a sub-page.
+- **Repo-ward always goes to the repo root** (`github.com/<user>/<repo>`), since a
+  Pages sub-path rarely matches the repo's actual file layout.
+- **Pages-ward returns to the last Pages page you were on** for that repo, instead
+  of guessing a URL from the repo path. First time toggling a given repo, it falls
+  back to the Pages site root.
 - Handles the `<user>.github.io` user/organization site repo as a special case
   (its Pages site has no `/repo` prefix).
 
@@ -28,9 +31,9 @@ current sub-path (e.g. `/blob/main/docs/`) intact where it makes sense.
 
 | From | To |
 |---|---|
-| `github.com/CornillieJ/omarchy` | `cornilliej.github.io/omarchy` |
-| `github.com/CornillieJ/omarchy/blob/main/README.md` | `cornilliej.github.io/omarchy/blob/main/README.md` |
-| `github.com/CornillieJ/CornillieJ.github.io` | `cornilliej.github.io` |
+| `github.com/CornillieJ/omarchy/blob/main/README.md` | `cornilliej.github.io/omarchy` (or wherever you last were on that site) |
+| `cornilliej.github.io/omarchy/some/page` | `github.com/CornillieJ/omarchy` |
+| `github.com/CornillieJ/CornillieJ.github.io` | `cornilliej.github.io/` |
 
 ## Install
 
