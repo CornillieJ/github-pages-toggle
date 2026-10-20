@@ -6,11 +6,26 @@
     </linearGradient>
   </defs>
   <rect width="128" height="128" rx="24" fill="url(#bg)"/>
-  <path fill="#ffffff" d="M64 22c-18.78 0-34 15.22-34 34 0 15.02 9.74 27.76 23.25 32.26 1.7.31 2.32-.74 2.32-1.64 0-.81-.03-2.96-.05-5.81-9.46 2.06-11.46-4.56-11.46-4.56-1.55-3.94-3.78-4.99-3.78-4.99-3.09-2.11.23-2.07.23-2.07 3.42.24 5.22 3.51 5.22 3.51 3.04 5.21 7.97 3.71 9.91 2.84.31-2.21 1.19-3.71 2.16-4.57-7.55-.86-15.49-3.78-15.49-16.82 0-3.72 1.33-6.75 3.51-9.13-.35-.86-1.52-4.33.33-9.02 0 0 2.86-.92 9.38 3.49a32.3 32.3 0 0 1 8.54-1.15c2.9.01 5.82.39 8.54 1.15 6.51-4.41 9.37-3.49 9.37-3.49 1.86 4.69.69 8.16.34 9.02 2.18 2.38 3.5 5.41 3.5 9.13 0 13.07-7.95 15.95-15.53 16.79 1.22 1.05 2.31 3.13 2.31 6.31 0 4.55-.04 8.23-.04 9.35 0 .91.61 1.97 2.34 1.63C88.27 83.75 98 71.02 98 56c0-18.78-15.22-34-34-34z"/>
-  <g transform="translate(60,78)">
-    <path d="M0 0 L36 0" stroke="#58a6ff" stroke-width="7" stroke-linecap="round"/>
-    <path d="M24 -11 L38 0 L24 11" fill="none" stroke="#58a6ff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M36 16 L0 16" stroke="#3fb950" stroke-width="7" stroke-linecap="round"/>
-    <path d="M12 5 L-2 16 L12 27" fill="none" stroke="#3fb950" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- lucide "code-xml" (ISC license) : the repo / source side -->
+  <g transform="translate(5,40) scale(1.85)" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m18 16 4-4-4-4" />
+    <path d="m6 8-4 4 4 4" />
+    <path d="m14.5 4-5 16" />
+  </g>
+
+  <!-- swap arrows -->
+  <g>
+    <path d="M56 50 H76" stroke="#58a6ff" stroke-width="6.5" stroke-linecap="round"/>
+    <path d="M67 42 L78 50 L67 58" fill="none" stroke="#58a6ff" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M76 78 H56" stroke="#3fb950" stroke-width="6.5" stroke-linecap="round"/>
+    <path d="M65 70 L54 78 L65 86" fill="none" stroke="#3fb950" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- lucide "globe" (ISC license) : the published GitHub Pages site -->
+  <g transform="translate(76,41) scale(1.8)" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+    <path d="M2 12h20" />
   </g>
 </svg>

@@ -66,6 +66,11 @@ addons.mozilla.org:
    ```
 3. Upload the `.xpi` at [addons.mozilla.org/developers](https://addons.mozilla.org/developers/).
 
+## Credits
+
+Icon built from the [Lucide](https://lucide.dev) icon set (`code-xml`, `globe`,
+`arrow-left-right`), ISC licensed.
+
 ## License
 
 [MIT](LICENSE)
