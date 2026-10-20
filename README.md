@@ -34,7 +34,7 @@ current sub-path (e.g. `/blob/main/docs/`) intact where it makes sense.
 
 ## Install
 
-- **Firefox Add-ons (recommended):** [link once published on AMO]
+- **Firefox Add-ons (recommended):** https://addons.mozilla.org/en-US/firefox/addon/github-pages-toggle/
 - **Manual / development build:** see [Development](#development) below.
 
 ## Development
