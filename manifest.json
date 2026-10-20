@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "GitHub Pages Toggle",
+  "version": "1.0",
+  "description": "Press 'p' on a GitHub repo page to jump to its GitHub Pages site, and back.",
+  "permissions": [
+    "activeTab",
+    "tabs"
+  ],
+  "background": {
+    "scripts": ["url-mapper.js", "background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://github.com/*", "*://*.github.io/*"],
+      "js": ["url-mapper.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "browser_action": {
+    "default_title": "Toggle GitHub Pages"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "github-pages-toggle@jeffreycornillie.example"
+    }
+  }
+}
