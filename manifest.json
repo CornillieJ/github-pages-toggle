@@ -1,8 +1,17 @@
 {
   "manifest_version": 2,
   "name": "GitHub Pages Toggle",
-  "version": "1.0",
-  "description": "Press 'p' on a GitHub repo page to jump to its GitHub Pages site, and back.",
+  "version": "1.0.0",
+  "description": "Press P on a GitHub repo to jump straight to its GitHub Pages site, and back again.",
+  "author": "Jeffrey Cornillie",
+  "homepage_url": "https://github.com/CornillieJ/github-pages-toggle",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png",
+    "128": "icons/icon-128.png"
+  },
   "permissions": [
     "activeTab",
     "tabs"
@@ -19,11 +28,22 @@
     }
   ],
   "browser_action": {
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png"
+    },
     "default_title": "Toggle GitHub Pages"
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "github-pages-toggle@jeffreycornillie.example"
+      "id": "github-pages-toggle@cornilliej.github.io",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    },
+    "gecko_android": {
+      "strict_min_version": "142.0"
     }
   }
 }
