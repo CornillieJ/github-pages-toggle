@@ -1,11 +1,11 @@
 # GitHub Pages Toggle
 
 A tiny Firefox extension that jumps between a GitHub repo and its live GitHub Pages
-site — press <kbd>P</kbd> or click the toolbar icon, either direction.
+site — press a configurable key, or use the toolbar popup.
 
 ```
 https://github.com/<user>/<repo>            https://<user>.github.io/<repo>
-                               <── P ──>
+                      <── key / Shift+key ──>
 ```
 
 ## Why
@@ -16,9 +16,17 @@ by hand. This extension does that instantly, in either direction.
 
 ## Features
 
-- **Press `P`** anywhere on a `github.com` or `*.github.io` page (ignored while
-  typing in an input, textarea, or editable field) to toggle to the matching page.
-- **Click the toolbar icon** to do the same without touching the keyboard.
+- **Press your shortcut key** (default `p`) anywhere on a `github.com` or
+  `*.github.io` page — ignored while typing in an input, textarea, or editable
+  field — to toggle to the matching page.
+- **Hold Shift** while pressing it to open the result in a new tab instead of
+  navigating the current one.
+- **Click the toolbar icon** to open a small popup with "Toggle this tab" /
+  "Toggle in new tab" buttons, plus a field to change the shortcut key to
+  whatever you'd rather use (not limited to Firefox's `commands` API, which
+  requires a modifier key — this is just our own key listener).
+- A green checkmark flashes on the toolbar icon when a toggle succeeds, a red
+  `×` when the current page isn't a GitHub repo or Pages site.
 - **Repo-ward always goes to the repo root** (`github.com/<user>/<repo>`), since a
   Pages sub-path rarely matches the repo's actual file layout.
 - **Pages-ward returns to the last Pages page you were on** for that repo, instead

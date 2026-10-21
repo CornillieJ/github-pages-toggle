@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>GitHub Pages Toggle</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    width: 220px;
+    padding: 12px;
+    background: #0d1117;
+    color: #e6edf3;
+  }
+  button {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: none;
+    border-radius: 6px;
+    background: #21262d;
+    color: #e6edf3;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  button:hover {
+    background: #30363d;
+  }
+  .divider {
+    border-top: 1px solid #30363d;
+    margin: 10px 0;
+  }
+  label {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: #8b949e;
+  }
+  .key-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  input[type="text"] {
+    width: 36px;
+    text-align: center;
+    background: #161b22;
+    color: #e6edf3;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 6px;
+    font-size: 14px;
+  }
+  #save {
+    width: auto;
+    padding: 6px 10px;
+    margin: 0;
+  }
+  .saved {
+    color: #3fb950;
+    font-size: 11px;
+    margin-left: 4px;
+    visibility: hidden;
+  }
+  .hint {
+    font-size: 11px;
+    color: #8b949e;
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+  <button id="toggle">Toggle this tab</button>
+  <button id="toggle-new-tab">Toggle in new tab</button>
+
+  <div class="divider"></div>
+
+  <label for="key">Shortcut key</label>
+  <div class="key-row">
+    <input type="text" id="key" maxlength="1" />
+    <button id="save">Save</button>
+    <span class="saved" id="saved-msg">Saved</span>
+  </div>
+  <p class="hint">Shift+key opens the result in a new tab instead.</p>
+
+  <script src="url-mapper.js"></script>
+  <script src="badge.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

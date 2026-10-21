@@ -1,5 +1,18 @@
+let shortcutKey = "p";
+
+browser.storage.local.get("shortcutKey").then((result) => {
+  shortcutKey = result.shortcutKey || "p";
+});
+
+browser.storage.onChanged.addListener((changes, area) => {
+  if (area === "local" && changes.shortcutKey) {
+    shortcutKey = changes.shortcutKey.newValue || "p";
+  }
+});
+
 document.addEventListener("keydown", (event) => {
-  if (event.key !== "p" || event.ctrlKey || event.metaKey || event.altKey) return;
+  if (event.ctrlKey || event.metaKey || event.altKey) return;
+  if (event.key.toLowerCase() !== shortcutKey) return;
 
   const target = event.target;
   const isTyping =
@@ -7,9 +20,5 @@ document.addEventListener("keydown", (event) => {
     ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
   if (isTyping) return;
 
-  togglePagesUrl(window.location.href).then((destination) => {
-    if (destination) {
-      window.location.href = destination;
-    }
-  });
+  browser.runtime.sendMessage({ type: "toggleFromKey", newTab: event.shiftKey });
 });

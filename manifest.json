@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "GitHub Pages Toggle",
-  "version": "1.1.0",
-  "description": "Press P on a GitHub repo to jump straight to its GitHub Pages site, and back again.",
+  "version": "1.2.0",
+  "description": "Jump between a GitHub repo and its GitHub Pages site with a configurable keyboard shortcut or the toolbar popup.",
   "author": "Jeffrey Cornillie",
   "homepage_url": "https://github.com/CornillieJ/github-pages-toggle",
   "icons": {
@@ -18,13 +18,13 @@
     "storage"
   ],
   "background": {
-    "scripts": ["url-mapper.js", "background.js"],
+    "scripts": ["url-mapper.js", "badge.js", "background.js"],
     "persistent": false
   },
   "content_scripts": [
     {
       "matches": ["*://github.com/*", "*://*.github.io/*"],
-      "js": ["url-mapper.js", "content.js"],
+      "js": ["content.js"],
       "run_at": "document_idle"
     }
   ],
@@ -33,7 +33,8 @@
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png"
     },
-    "default_title": "Toggle GitHub Pages"
+    "default_title": "Toggle GitHub Pages",
+    "default_popup": "popup.html"
   },
   "browser_specific_settings": {
     "gecko": {
