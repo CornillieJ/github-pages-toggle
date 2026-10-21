@@ -54,6 +54,12 @@ there's no single stable GitHub element to anchor them to.
 Badges update immediately if you change a shortcut in the popup, and survive
 GitHub's in-app (Turbo) navigation between pages without a reload.
 
+They float over each tab's top-right corner without modifying any of
+GitHub's own elements or styles — the badges live in `document.body`,
+positioned with absolute page coordinates computed from the tab's own
+bounding box, rather than being nested inside GitHub's nav (which clips
+anything overflowing a tab's own box).
+
 ### Configurable shortcuts
 
 Every action above — the toggle plus every repo tool — can get its own
