@@ -67,21 +67,30 @@
     margin-top: 8px;
     line-height: 1.4;
   }
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #58a6ff;
+    margin-bottom: 8px;
+  }
 </style>
 </head>
 <body>
-  <button id="toggle">Toggle this tab</button>
-  <button id="toggle-new-tab">Toggle in new tab</button>
-
-  <div class="divider"></div>
-
-  <label for="key">Shortcut key</label>
+  <div class="section-title">Shortcut key</div>
   <div class="key-row">
     <input type="text" id="key" maxlength="1" />
     <button id="save">Save</button>
     <span class="saved" id="saved-msg">Saved</span>
   </div>
   <p class="hint">Shift+key opens the result in a new tab instead.</p>
+
+  <div class="divider"></div>
+
+  <div class="section-title">GitHub &harr; Pages</div>
+  <button id="toggle">Switch this tab</button>
+  <button id="toggle-new-tab">Open in a new tab</button>
 
   <script src="url-mapper.js"></script>
   <script src="badge.js"></script>
