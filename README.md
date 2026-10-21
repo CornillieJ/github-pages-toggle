@@ -43,6 +43,18 @@ https://github.com/<user>/<repo>            https://<user>.github.io/<repo>
 These all work whether you're currently on the `github.com` side or the
 `*.github.io` side of a repo.
 
+### Configurable shortcuts
+
+Every action above — the toggle plus every repo tool — can get its own
+single-key shortcut from the popup's **Shortcuts** section: type a letter or
+digit into its box and click **Save shortcuts**. Leave a box empty to disable
+that action's shortcut. Keys are checked for duplicates across all actions
+before saving.
+
+This is a page-level key listener rather than Firefox's `commands` API, since
+`commands` requires a modifier key (no bare `p`), and we specifically wanted
+single-key, user-chosen shortcuts for each action.
+
 ## Examples
 
 | From | To |
