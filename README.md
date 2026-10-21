@@ -59,8 +59,8 @@ These all work whether you're currently on the `github.com` side or the
 ## Development
 
 ```sh
-git clone https://github.com/CornillieJ/github-pages-toggle.git
-cd github-pages-toggle
+git clone https://github.com/CornillieJ/repotools.git
+cd repotools
 ```
 
 Load it temporarily in Firefox:
@@ -80,8 +80,8 @@ addons.mozilla.org:
 1. Bump `version` in `manifest.json`.
 2. Zip the extension's contents (not the folder itself):
    ```sh
-   cd github-pages-toggle
-   zip -r -FS ../github-pages-toggle.xpi . -x ".git/*" "assets/*" "README.md" "LICENSE" ".gitignore"
+   cd repotools
+   zip -r -FS ../repotools.xpi . -x ".git/*" "assets/*" "README.md" "LICENSE" ".gitignore"
    ```
 3. Upload the `.xpi` at [addons.mozilla.org/developers](https://addons.mozilla.org/developers/).
 
