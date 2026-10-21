@@ -26,35 +26,6 @@ async function handleToggle(newTab) {
 document.getElementById("toggle").addEventListener("click", () => handleToggle(false));
 document.getElementById("toggle-new-tab").addEventListener("click", () => handleToggle(true));
 
-const keyInput = document.getElementById("key");
-const savedMsg = document.getElementById("saved-msg");
-
-browser.storage.local.get("shortcutKey").then((result) => {
-  keyInput.value = result.shortcutKey || "p";
-});
-
-document.getElementById("save").addEventListener("click", async () => {
-  const raw = keyInput.value.trim();
-  if (!/^[a-z0-9]$/i.test(raw)) {
-    keyInput.style.borderColor = BADGE_MISS;
-    return;
-  }
-
-  const value = raw.toLowerCase();
-  keyInput.value = value;
-  keyInput.style.borderColor = "#30363d";
-  await browser.storage.local.set({ shortcutKey: value });
-
-  savedMsg.style.visibility = "visible";
-  setTimeout(() => {
-    savedMsg.style.visibility = "hidden";
-  }, 1200);
-});
-
-function openInNewTab(url) {
-  browser.tabs.create({ url });
-}
-
 function flashButtonLabel(button, text, revertAfterMs = 1200) {
   const original = button.textContent;
   button.textContent = text;
@@ -72,10 +43,86 @@ async function copyToClipboard(button, text) {
   }
 }
 
-(async () => {
-  const tab = await getActiveTab();
-  const repo = getRepoInfo(tab.url);
+function openInNewTab(url) {
+  browser.tabs.create({ url });
+}
 
+// --- Shortcuts list -------------------------------------------------------
+
+const shortcutsList = document.getElementById("shortcuts-list");
+const savedMsg = document.getElementById("saved-msg");
+const errorMsg = document.getElementById("error-msg");
+
+function showError(text) {
+  errorMsg.textContent = text;
+  errorMsg.style.visibility = "visible";
+  setTimeout(() => {
+    errorMsg.style.visibility = "hidden";
+  }, 2000);
+}
+
+function showSaved() {
+  savedMsg.style.visibility = "visible";
+  setTimeout(() => {
+    savedMsg.style.visibility = "hidden";
+  }, 1200);
+}
+
+function renderShortcutRows(shortcuts) {
+  shortcutsList.innerHTML = "";
+  for (const field of SHORTCUT_FIELDS) {
+    const row = document.createElement("div");
+    row.className = "shortcut-row";
+
+    const label = document.createElement("span");
+    label.textContent = field.label;
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.maxLength = 1;
+    input.dataset.field = field.id;
+    input.value = shortcuts[field.id] || "";
+
+    row.appendChild(label);
+    row.appendChild(input);
+    shortcutsList.appendChild(row);
+  }
+}
+
+document.getElementById("save-shortcuts").addEventListener("click", async () => {
+  const inputs = Array.from(shortcutsList.querySelectorAll("input[data-field]"));
+  const next = {};
+  const seen = new Map();
+
+  for (const input of inputs) {
+    const raw = input.value.trim();
+    if (!raw) continue;
+
+    if (!/^[a-z0-9]$/i.test(raw)) {
+      showError(`"${raw}" isn't a single letter or digit.`);
+      return;
+    }
+
+    const key = raw.toLowerCase();
+    if (seen.has(key)) {
+      showError(`Key "${key}" is assigned twice.`);
+      return;
+    }
+    seen.set(key, input.dataset.field);
+    next[input.dataset.field] = key;
+  }
+
+  await browser.storage.local.set({ shortcuts: next });
+  showSaved();
+});
+
+// --- Repo tools / explore --------------------------------------------------
+
+(async () => {
+  const [tab, shortcuts] = await Promise.all([getActiveTab(), loadShortcuts()]);
+  renderShortcutRows(shortcuts);
+
+  const repo = getRepoInfo(tab.url);
   if (!repo) {
     document.getElementById("no-repo").style.display = "block";
     return;
@@ -84,25 +131,15 @@ async function copyToClipboard(button, text) {
   document.getElementById("repo-tools").style.display = "block";
   document.getElementById("explore").style.display = "block";
 
-  const { user, repo: repoName } = repo;
-  const repoUrl = `https://github.com/${user}/${repoName}`;
-
-  document.getElementById("copy-https").addEventListener("click", (e) => {
-    copyToClipboard(e.currentTarget, `${repoUrl}.git`);
+  document.querySelectorAll("button[data-action]").forEach((button) => {
+    const action = REPO_ACTIONS[button.dataset.action];
+    button.addEventListener("click", () => {
+      const value = action.build(repo);
+      if (action.kind === "copy") {
+        copyToClipboard(button, value);
+      } else {
+        openInNewTab(value);
+      }
+    });
   });
-  document.getElementById("copy-ssh").addEventListener("click", (e) => {
-    copyToClipboard(e.currentTarget, `git@github.com:${user}/${repoName}.git`);
-  });
-
-  document.getElementById("link-issues").addEventListener("click", () => openInNewTab(`${repoUrl}/issues`));
-  document.getElementById("link-prs").addEventListener("click", () => openInNewTab(`${repoUrl}/pulls`));
-  document.getElementById("link-actions").addEventListener("click", () => openInNewTab(`${repoUrl}/actions`));
-  document.getElementById("link-releases").addEventListener("click", () => openInNewTab(`${repoUrl}/releases`));
-
-  document.getElementById("link-deepwiki").addEventListener("click", () =>
-    openInNewTab(`https://deepwiki.com/${user}/${repoName}`)
-  );
-  document.getElementById("link-gitdiagram").addEventListener("click", () =>
-    openInNewTab(`https://gitdiagram.com/${user}/${repoName}`)
-  );
 })();

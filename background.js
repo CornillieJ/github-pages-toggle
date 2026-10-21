@@ -17,7 +17,16 @@ async function performToggle({ tabId, url, newTab }) {
 }
 
 browser.runtime.onMessage.addListener((message, sender) => {
-  if (message.type === "toggleFromKey" && sender.tab) {
-    performToggle({ tabId: sender.tab.id, url: sender.tab.url, newTab: message.newTab });
+  if (!sender.tab) return;
+  const tabId = sender.tab.id;
+
+  if (message.type === "toggleFromKey") {
+    performToggle({ tabId, url: sender.tab.url, newTab: message.newTab });
+  } else if (message.type === "openUrl") {
+    browser.tabs.create({ url: message.url }).then(() => {
+      flashBadge(tabId, "✓", BADGE_OK);
+    });
+  } else if (message.type === "badgeFeedback") {
+    flashBadge(tabId, message.ok ? "✓" : "×", message.ok ? BADGE_OK : BADGE_MISS);
   }
 });

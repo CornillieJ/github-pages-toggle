@@ -1,18 +1,17 @@
-let shortcutKey = "p";
+let shortcuts = { toggle: "p" };
 
-browser.storage.local.get("shortcutKey").then((result) => {
-  shortcutKey = result.shortcutKey || "p";
+loadShortcuts().then((result) => {
+  shortcuts = result;
 });
 
 browser.storage.onChanged.addListener((changes, area) => {
-  if (area === "local" && changes.shortcutKey) {
-    shortcutKey = changes.shortcutKey.newValue || "p";
+  if (area === "local" && changes.shortcuts) {
+    shortcuts = changes.shortcuts.newValue || { toggle: "p" };
   }
 });
 
 document.addEventListener("keydown", (event) => {
   if (event.ctrlKey || event.metaKey || event.altKey) return;
-  if (event.key.toLowerCase() !== shortcutKey) return;
 
   const target = event.target;
   const isTyping =
@@ -20,5 +19,30 @@ document.addEventListener("keydown", (event) => {
     ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
   if (isTyping) return;
 
-  browser.runtime.sendMessage({ type: "toggleFromKey", newTab: event.shiftKey });
+  const key = event.key.toLowerCase();
+
+  if (shortcuts.toggle && key === shortcuts.toggle.toLowerCase()) {
+    browser.runtime.sendMessage({ type: "toggleFromKey", newTab: event.shiftKey });
+    return;
+  }
+
+  const actionId = Object.keys(REPO_ACTIONS).find(
+    (id) => shortcuts[id] && shortcuts[id].toLowerCase() === key
+  );
+  if (!actionId) return;
+
+  const repo = getRepoInfo(window.location.href);
+  if (!repo) return;
+
+  const action = REPO_ACTIONS[actionId];
+  const value = action.build(repo);
+
+  if (action.kind === "copy") {
+    navigator.clipboard
+      .writeText(value)
+      .then(() => browser.runtime.sendMessage({ type: "badgeFeedback", ok: true }))
+      .catch(() => browser.runtime.sendMessage({ type: "badgeFeedback", ok: false }));
+  } else {
+    browser.runtime.sendMessage({ type: "openUrl", url: value });
+  }
 });

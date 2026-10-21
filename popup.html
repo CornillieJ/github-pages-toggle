@@ -6,7 +6,7 @@
 <style>
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-    width: 260px;
+    width: 270px;
     padding: 12px;
     background: #0d1117;
     color: #e6edf3;
@@ -29,42 +29,10 @@
     border-top: 1px solid #30363d;
     margin: 10px 0;
   }
-  label {
-    display: block;
-    font-size: 12px;
-    margin-bottom: 4px;
-    color: #8b949e;
-  }
-  .key-row {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-  }
-  input[type="text"] {
-    width: 36px;
-    text-align: center;
-    background: #161b22;
-    color: #e6edf3;
-    border: 1px solid #30363d;
-    border-radius: 6px;
-    padding: 6px;
-    font-size: 14px;
-  }
-  #save {
-    width: auto;
-    padding: 6px 10px;
-    margin: 0;
-  }
-  .saved {
-    color: #3fb950;
-    font-size: 11px;
-    margin-left: 4px;
-    visibility: hidden;
-  }
   .hint {
     font-size: 11px;
     color: #8b949e;
-    margin-top: 8px;
+    margin-top: 6px;
     line-height: 1.4;
   }
   .section-title {
@@ -98,16 +66,56 @@
     color: #8b949e;
     display: none;
   }
+  .shortcut-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 12px;
+  }
+  .shortcut-row span {
+    color: #e6edf3;
+  }
+  .shortcut-row input {
+    width: 28px;
+    text-align: center;
+    background: #161b22;
+    color: #e6edf3;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 5px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  #save-shortcuts {
+    margin-top: 4px;
+  }
+  .saved {
+    color: #3fb950;
+    font-size: 11px;
+    display: block;
+    text-align: center;
+    visibility: hidden;
+    margin-top: -4px;
+    margin-bottom: 8px;
+  }
+  .error {
+    color: #f85149;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 8px;
+    visibility: hidden;
+  }
 </style>
 </head>
 <body>
-  <div class="section-title">Shortcut key</div>
-  <div class="key-row">
-    <input type="text" id="key" maxlength="1" />
-    <button id="save">Save</button>
-    <span class="saved" id="saved-msg">Saved</span>
-  </div>
-  <p class="hint">Shift+key opens the result in a new tab instead.</p>
+  <div class="section-title">Shortcuts</div>
+  <div id="shortcuts-list"></div>
+  <button id="save-shortcuts">Save shortcuts</button>
+  <span class="saved" id="saved-msg">Saved</span>
+  <span class="error" id="error-msg"></span>
+  <p class="hint">Leave a box empty to disable that shortcut. Shift+Toggle opens the result in a new tab.</p>
 
   <div class="divider"></div>
 
@@ -120,28 +128,29 @@
   <div id="repo-tools">
     <div class="section-title">Repo tools</div>
     <div class="row-2">
-      <button id="copy-https">Copy HTTPS</button>
-      <button id="copy-ssh">Copy SSH</button>
+      <button data-action="copyHttps">Copy HTTPS</button>
+      <button data-action="copySsh">Copy SSH</button>
     </div>
     <div class="grid-2x2">
-      <button id="link-issues">Issues</button>
-      <button id="link-prs">Pull requests</button>
-      <button id="link-actions">Actions</button>
-      <button id="link-releases">Releases</button>
+      <button data-action="issues">Issues</button>
+      <button data-action="prs">Pull requests</button>
+      <button data-action="actionsTab">Actions</button>
+      <button data-action="releases">Releases</button>
     </div>
 
     <div class="divider"></div>
 
     <div id="explore">
       <div class="section-title">Explore elsewhere</div>
-      <button id="link-deepwiki">DeepWiki</button>
-      <button id="link-gitdiagram">GitDiagram</button>
+      <button data-action="deepwiki">DeepWiki</button>
+      <button data-action="gitdiagram">GitDiagram</button>
     </div>
   </div>
 
   <p id="no-repo">Open a GitHub repo or its Pages site to use repo tools.</p>
 
   <script src="url-mapper.js"></script>
+  <script src="shortcuts.js"></script>
   <script src="badge.js"></script>
   <script src="popup.js"></script>
 </body>
