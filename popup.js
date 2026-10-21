@@ -47,6 +47,31 @@ function openInNewTab(url) {
   browser.tabs.create({ url });
 }
 
+// --- Key badges -------------------------------------------------------------
+
+function setKeyBadge(button, text) {
+  if (!button) return;
+  const existing = button.querySelector(".key-badge");
+  if (existing) existing.remove();
+  if (!text) return;
+
+  const badge = document.createElement("span");
+  badge.className = "key-badge";
+  badge.textContent = text;
+  button.appendChild(badge);
+}
+
+function renderKeyBadges(shortcuts) {
+  const toggleKey = shortcuts.toggle ? shortcuts.toggle.toUpperCase() : "";
+  setKeyBadge(document.getElementById("toggle"), toggleKey);
+  setKeyBadge(document.getElementById("toggle-new-tab"), toggleKey ? `⇧${toggleKey}` : "");
+
+  document.querySelectorAll("button[data-action]").forEach((button) => {
+    const key = shortcuts[button.dataset.action];
+    setKeyBadge(button, key ? key.toUpperCase() : "");
+  });
+}
+
 // --- Shortcuts list -------------------------------------------------------
 
 const shortcutsList = document.getElementById("shortcuts-list");
@@ -129,6 +154,7 @@ document.getElementById("save-shortcuts").addEventListener("click", async () => 
   }
 
   await browser.storage.local.set({ shortcuts: next });
+  renderKeyBadges(next);
   showSaved();
 });
 
@@ -137,6 +163,7 @@ document.getElementById("save-shortcuts").addEventListener("click", async () => 
 (async () => {
   const [tab, shortcuts] = await Promise.all([getActiveTab(), loadShortcuts()]);
   renderShortcutRows(shortcuts);
+  renderKeyBadges(shortcuts);
 
   const repo = getRepoInfo(tab.url);
   if (!repo) {
