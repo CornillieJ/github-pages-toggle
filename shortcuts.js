@@ -97,17 +97,36 @@ const SHORTCUT_FIELDS = [
   },
 ];
 
+const DEFAULT_SHORTCUTS = {
+  toggle: "p",
+  copyHttps: "c",
+  copySsh: "",
+  issues: "i",
+  prs: "r",
+  actionsTab: "a",
+  releases: "n",
+  deepwiki: "w",
+  gitdiagram: "d",
+};
+
 // Reads the configured shortcuts, migrating the older single "shortcutKey"
-// value (pre-2.0, toggle-only) into the new per-action map on first read.
+// value (pre-2.0, toggle-only) into the new per-action map on first read, and
+// filling in defaults for any action that hasn't been saved yet (including
+// ones added after a user already saved their own set).
 async function loadShortcuts() {
   const stored = await browser.storage.local.get(["shortcuts", "shortcutKey"]);
-  if (stored.shortcuts) return stored.shortcuts;
+  if (stored.shortcuts) {
+    return { ...DEFAULT_SHORTCUTS, ...stored.shortcuts };
+  }
 
-  const migrated = { toggle: stored.shortcutKey || "p" };
+  const migrated = {
+    ...DEFAULT_SHORTCUTS,
+    toggle: stored.shortcutKey || DEFAULT_SHORTCUTS.toggle,
+  };
   await browser.storage.local.set({ shortcuts: migrated });
   return migrated;
 }
 
 if (typeof module !== "undefined") {
-  module.exports = { REPO_ACTIONS, SHORTCUT_FIELDS, loadShortcuts };
+  module.exports = { REPO_ACTIONS, SHORTCUT_FIELDS, DEFAULT_SHORTCUTS, loadShortcuts };
 }

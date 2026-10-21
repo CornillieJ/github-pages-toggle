@@ -107,7 +107,12 @@ document.getElementById("save-shortcuts").addEventListener("click", async () => 
 
   for (const input of inputs) {
     const raw = input.value.trim();
-    if (!raw) continue;
+    if (!raw) {
+      // Persist the blank explicitly, so a cleared field stays disabled
+      // instead of falling back to its default on next load.
+      next[input.dataset.field] = "";
+      continue;
+    }
 
     if (!/^[a-z0-9]$/i.test(raw)) {
       showError(`"${raw}" isn't a single letter or digit.`);

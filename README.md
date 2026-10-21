@@ -51,6 +51,24 @@ digit into its box and click **Save shortcuts**. Leave a box empty to disable
 that action's shortcut. Keys are checked for duplicates across all actions
 before saving.
 
+Defaults:
+
+| Action | Key |
+|---|---|
+| Toggle GitHub ↔ Pages | `p` |
+| Copy HTTPS clone URL | `c` |
+| Copy SSH clone URL | *(none)* |
+| Open Issues | `i` |
+| Open Pull requests | `r` |
+| Open Actions | `a` |
+| Open Releases | `n` |
+| Open DeepWiki | `w` |
+| Open GitDiagram | `d` |
+
+The repo-tool shortcuts (everything except the toggle) only fire on the
+repo's `github.com` page, not its Pages site — pressing `i` to jump to
+Issues wouldn't make sense while you're just reading the published site.
+
 This is a page-level key listener rather than Firefox's `commands` API, since
 `commands` requires a modifier key (no bare `p`), and we specifically wanted
 single-key, user-chosen shortcuts for each action.

@@ -26,6 +26,11 @@ document.addEventListener("keydown", (event) => {
     return;
   }
 
+  // The repo tools (clone URL, Issues/PRs/Actions/Releases, DeepWiki,
+  // GitDiagram) only make sense on the repo's own github.com page, not on
+  // its Pages site.
+  if (window.location.hostname !== "github.com") return;
+
   const actionId = Object.keys(REPO_ACTIONS).find(
     (id) => shortcuts[id] && shortcuts[id].toLowerCase() === key
   );
