@@ -1,4 +1,5 @@
 let shortcuts = { toggle: "p" };
+let badgeStyle = { enabled: true, color: "#1f6feb" };
 
 function whenWindowLoaded(callback) {
   if (document.readyState === "complete") {
@@ -8,25 +9,34 @@ function whenWindowLoaded(callback) {
   }
 }
 
-loadShortcuts().then((result) => {
-  shortcuts = result;
+Promise.all([loadShortcuts(), loadBadgeStyle()]).then(([loadedShortcuts, loadedBadgeStyle]) => {
+  shortcuts = loadedShortcuts;
+  badgeStyle = loadedBadgeStyle;
   // Waiting for the full "load" event (not just document_idle, which can
   // fire before GitHub's client-side hydration has settled) reduces the
   // chance this first injection races against React replacing the DOM out
   // from under it before the MutationObserver below is even attached.
-  whenWindowLoaded(() => injectPageBadges(shortcuts));
+  whenWindowLoaded(() => injectPageBadges(shortcuts, badgeStyle));
 });
 
 browser.storage.onChanged.addListener((changes, area) => {
-  if (area === "local" && changes.shortcuts) {
+  if (area !== "local") return;
+
+  let changed = false;
+  if (changes.shortcuts) {
     shortcuts = changes.shortcuts.newValue || { toggle: "p" };
-    injectPageBadges(shortcuts);
+    changed = true;
   }
+  if (changes.badgeStyle) {
+    badgeStyle = { ...DEFAULT_BADGE_STYLE, ...(changes.badgeStyle.newValue || {}) };
+    changed = true;
+  }
+  if (changed) injectPageBadges(shortcuts, badgeStyle);
 });
 
 // GitHub is a Turbo SPA: most navigation swaps the DOM without a full page
 // reload, so re-inject badges whenever that happens.
-document.addEventListener("turbo:load", () => injectPageBadges(shortcuts));
+document.addEventListener("turbo:load", () => injectPageBadges(shortcuts, badgeStyle));
 
 // React also re-renders parts of the page in place (e.g. hydration finishing,
 // counters updating) with no "turbo:load" at all, which can silently replace
@@ -39,7 +49,7 @@ if (window.location.hostname === "github.com") {
     clearTimeout(pageBadgeRetimer);
     pageBadgeRetimer = setTimeout(() => {
       pageBadgeObserver.disconnect();
-      injectPageBadges(shortcuts);
+      injectPageBadges(shortcuts, badgeStyle);
       pageBadgeObserver.observe(document.body, { childList: true, subtree: true });
     }, 200);
   });

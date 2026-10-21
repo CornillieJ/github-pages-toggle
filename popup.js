@@ -158,12 +158,37 @@ document.getElementById("save-shortcuts").addEventListener("click", async () => 
   showSaved();
 });
 
+// --- Badge style ------------------------------------------------------------
+
+const badgeEnabledInput = document.getElementById("badge-enabled");
+const badgeColorInput = document.getElementById("badge-color");
+
+badgeEnabledInput.addEventListener("change", async () => {
+  const current = await loadBadgeStyle();
+  await browser.storage.local.set({
+    badgeStyle: { ...current, enabled: badgeEnabledInput.checked },
+  });
+});
+
+badgeColorInput.addEventListener("input", async () => {
+  const current = await loadBadgeStyle();
+  await browser.storage.local.set({
+    badgeStyle: { ...current, color: badgeColorInput.value },
+  });
+});
+
 // --- Repo tools / explore --------------------------------------------------
 
 (async () => {
-  const [tab, shortcuts] = await Promise.all([getActiveTab(), loadShortcuts()]);
+  const [tab, shortcuts, badgeStyle] = await Promise.all([
+    getActiveTab(),
+    loadShortcuts(),
+    loadBadgeStyle(),
+  ]);
   renderShortcutRows(shortcuts);
   renderKeyBadges(shortcuts);
+  badgeEnabledInput.checked = badgeStyle.enabled;
+  badgeColorInput.value = badgeStyle.color;
 
   const repo = getRepoInfo(tab.url);
   if (!repo) {

@@ -1,9 +1,9 @@
 // Injects small shortcut-key badges floating over GitHub's own repo nav
 // (Issues, Pull requests, Actions), the green "Code" clone-URL button, and,
-// when present, the sidebar Releases link. Plus a plain (non-floating) hint
-// appended to the end of the nav itself for the GitHub <-> Pages toggle key.
-// Only runs on github.com repo pages - never on Pages sites, and never for
-// actions that have no single stable on-page element to anchor to (DeepWiki,
+// when present, the sidebar Releases link. Plus a colored pill appended to
+// the end of the nav itself for the GitHub <-> Pages toggle key. Only runs
+// on github.com repo pages - never on Pages sites, and never for actions
+// that have no single stable on-page element to anchor to (DeepWiki,
 // GitDiagram).
 //
 // Floating badges are appended to document.body, not nested inside GitHub's
@@ -26,41 +26,46 @@ const PAGE_BADGE_IDS = {
   cloneUrl: "repotools-badge-clone",
 };
 
+const PAGES_HINT_ID = "repotools-pages-hint-item";
+
 function injectBadgeStyleOnce() {
   if (document.getElementById("repotools-badge-style")) return;
   const style = document.createElement("style");
   style.id = "repotools-badge-style";
+  // Color comes from a CSS variable set by applyBadgeColor(), so changing it
+  // in the popup doesn't require touching every existing badge element.
   style.textContent = `
-    .repotools-badge {
-      position: absolute;
-      transform: translate(-50%, -50%);
-      background: #1f6feb;
+    .repotools-badge-pill {
+      background: var(--repotools-badge-color, #1f6feb);
       color: #ffffff;
       font-size: 9px;
       font-weight: 700;
       line-height: 1;
-      padding: 2px 5px;
+      padding: 2px 6px;
       border-radius: 8px;
       border: 1px solid rgba(255, 255, 255, 0.7);
+      white-space: nowrap;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .repotools-badge {
+      position: absolute;
+      transform: translate(-50%, -50%);
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
       z-index: 2147483647;
       pointer-events: none;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      white-space: nowrap;
     }
     .repotools-pages-hint-item {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      padding: 0 8px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #8b949e;
-      white-space: nowrap;
+      margin: 0 4px;
       cursor: default;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
   `;
   document.head.appendChild(style);
+}
+
+function applyBadgeColor(color) {
+  document.documentElement.style.setProperty("--repotools-badge-color", color || "#1f6feb");
 }
 
 function positionBadge(badge, anchor) {
@@ -80,7 +85,7 @@ function setPageBadge(id, anchor, text) {
   if (!badge) {
     badge = document.createElement("span");
     badge.id = id;
-    badge.className = "repotools-badge";
+    badge.className = "repotools-badge repotools-badge-pill";
     document.body.appendChild(badge);
   }
   badge.textContent = text;
@@ -138,8 +143,7 @@ function injectReleasesBadge(repo, key, attempt = 0) {
 }
 
 function appendPagesHintItem(toggleKey) {
-  const id = "repotools-pages-hint-item";
-  let item = document.getElementById(id);
+  let item = document.getElementById(PAGES_HINT_ID);
 
   if (!toggleKey) {
     if (item) item.remove();
@@ -160,22 +164,39 @@ function appendPagesHintItem(toggleKey) {
 
   if (!item) {
     item = document.createElement("li");
-    item.id = id;
+    item.id = PAGES_HINT_ID;
     item.className = "repotools-pages-hint-item";
+    const pill = document.createElement("span");
+    pill.className = "repotools-badge-pill";
+    item.appendChild(pill);
     list.appendChild(item);
   } else if (item.parentElement !== list) {
     list.appendChild(item);
   }
-  item.textContent = `${toggleKey} → Pages`;
+  item.querySelector(".repotools-badge-pill").textContent = `${toggleKey} → Pages`;
 }
 
-function injectPageBadges(shortcuts) {
+function removeAllPageBadges() {
+  for (const id of Object.values(PAGE_BADGE_IDS)) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+  const hint = document.getElementById(PAGES_HINT_ID);
+  if (hint) hint.remove();
+}
+
+function injectPageBadges(shortcuts, badgeStyle) {
   if (window.location.hostname !== "github.com") return;
+  if (!badgeStyle || !badgeStyle.enabled) {
+    removeAllPageBadges();
+    return;
+  }
 
   const repo = getRepoInfo(window.location.href);
   if (!repo) return;
 
   injectBadgeStyleOnce();
+  applyBadgeColor(badgeStyle.color);
 
   setPageBadgeTracked(
     PAGE_BADGE_IDS.issues,

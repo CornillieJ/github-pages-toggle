@@ -157,6 +157,40 @@
     margin-bottom: 8px;
     visibility: hidden;
   }
+  .badge-style-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 12.5px;
+  }
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+  .toggle-row input {
+    cursor: pointer;
+  }
+  .color-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .color-row label {
+    font-size: 11px;
+    color: #8b949e;
+  }
+  #badge-color {
+    width: 28px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -166,6 +200,20 @@
   <span class="saved" id="saved-msg">Saved</span>
   <span class="error" id="error-msg"></span>
   <p class="hint">Leave a box empty to disable that shortcut. Shift+Toggle opens the result in a new tab.</p>
+
+  <div class="divider"></div>
+
+  <div class="section-title">Badge style</div>
+  <div class="badge-style-row">
+    <label class="toggle-row">
+      <input type="checkbox" id="badge-enabled" />
+      <span>Show on-page badges</span>
+    </label>
+    <div class="color-row">
+      <label for="badge-color">Color</label>
+      <input type="color" id="badge-color" />
+    </div>
+  </div>
 
   <div class="divider"></div>
 
@@ -201,6 +249,7 @@
 
   <script src="url-mapper.js"></script>
   <script src="shortcuts.js"></script>
+  <script src="badge-style.js"></script>
   <script src="badge.js"></script>
   <script src="popup.js"></script>
 </body>

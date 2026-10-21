@@ -53,13 +53,17 @@ present:
 - The green **Code** button (the clone-URL dropdown) gets a badge showing
   both clone-URL shortcuts together when set, e.g. `C(https) S(ssh)` — only
   the ones you've actually configured appear.
-- A plain, non-interactive label (e.g. `P → Pages`) is appended to the end of
+- A non-interactive colored pill (e.g. `P → Pages`) is appended to the end of
   GitHub's own repo nav, showing the toggle key as a visual reminder — since
   there's no "Pages" tab in GitHub's nav to badge directly, this rides along
   as an extra item in that same list instead of floating over anything.
 
 DeepWiki/GitDiagram don't get an on-page badge — there's no GitHub element
 to anchor them to at all.
+
+The popup's **Badge style** section lets you turn these on-page badges off
+entirely, or pick their color with a color picker — both apply immediately
+to any open GitHub tab.
 
 Badges update immediately if you change a shortcut in the popup, and survive
 both GitHub's in-app (Turbo) navigation between pages and React re-rendering
