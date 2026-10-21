@@ -118,6 +118,27 @@ function buildCloneBadgeText(shortcuts) {
   return parts.join(" ");
 }
 
+// Finds the real GitHub nav element for a repo-tool action, when one exists
+// on the current page. Used to simulate a real click (letting GitHub's own
+// Turbo router handle it as an in-page navigation) instead of opening a new
+// tab, which is always a full cold load. Returns null for actions with no
+// on-page element (clone URL copies, DeepWiki, GitDiagram) or when the
+// element just isn't present right now (e.g. Releases hasn't hydrated yet).
+function findRepoNavAnchor(actionId, repo) {
+  switch (actionId) {
+    case "issues":
+      return document.querySelector('a[data-tab-item="issues"]');
+    case "prs":
+      return document.querySelector('a[data-tab-item="pull-requests"]');
+    case "actionsTab":
+      return document.querySelector('a[data-tab-item="actions"]');
+    case "releases":
+      return document.querySelector(`a[href="/${repo.user}/${repo.repo}/releases"]`);
+    default:
+      return null;
+  }
+}
+
 function findCloneButton() {
   // The green "Code" button is the page's only primary-variant button;
   // matching on its icon too guards against that ever not being unique.

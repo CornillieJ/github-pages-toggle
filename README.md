@@ -43,6 +43,13 @@ https://github.com/<user>/<repo>            https://<user>.github.io/<repo>
 These all work whether you're currently on the `github.com` side or the
 `*.github.io` side of a repo.
 
+Pressing the shortcut key for Issues, Pull requests, Actions, or Releases
+simulates a real click on GitHub's own nav tab when it's present on the
+page, so GitHub's Turbo router handles it as an in-page navigation — the
+same as clicking it yourself, no full page reload. Hold Shift to force a new
+tab instead (which always needs a real navigation). DeepWiki/GitDiagram
+always open in a new tab since they're a different site entirely.
+
 ### On-page shortcut badges
 
 On a repo's `github.com` page, RepoTools drops a small badge showing the

@@ -93,7 +93,21 @@ document.addEventListener("keydown", (event) => {
       .writeText(value)
       .then(() => browser.runtime.sendMessage({ type: "badgeFeedback", ok: true }))
       .catch(() => browser.runtime.sendMessage({ type: "badgeFeedback", ok: false }));
-  } else {
-    browser.runtime.sendMessage({ type: "openUrl", url: value });
+    return;
   }
+
+  // Clicking GitHub's own nav tab lets its Turbo router handle the
+  // navigation in-place (no full reload), same as a user clicking it
+  // themselves would. Only do this for the plain key - Shift explicitly asks
+  // for a new tab, which always needs a real navigation anyway.
+  if (!event.shiftKey) {
+    const anchor = findRepoNavAnchor(actionId, repo);
+    if (anchor) {
+      anchor.click();
+      browser.runtime.sendMessage({ type: "badgeFeedback", ok: true });
+      return;
+    }
+  }
+
+  browser.runtime.sendMessage({ type: "openUrl", url: value });
 });
