@@ -1,11 +1,13 @@
 // Injects small shortcut-key badges floating over GitHub's own repo nav
-// (Issues, Pull requests, Actions) and, when present, the sidebar Releases
-// link. Only runs on github.com repo pages - never on Pages sites, and never
-// for actions that have no single stable on-page element to anchor to (clone
-// URL, DeepWiki, GitDiagram).
+// (Issues, Pull requests, Actions), the green "Code" clone-URL button, and,
+// when present, the sidebar Releases link. Plus a plain (non-floating) hint
+// appended to the end of the nav itself for the GitHub <-> Pages toggle key.
+// Only runs on github.com repo pages - never on Pages sites, and never for
+// actions that have no single stable on-page element to anchor to (DeepWiki,
+// GitDiagram).
 //
-// Badges are appended to document.body, not nested inside GitHub's own
-// elements - GitHub's nav tabs clip anything that overflows their own box
+// Floating badges are appended to document.body, not nested inside GitHub's
+// own elements - GitHub's nav tabs clip anything that overflows their own box
 // (used to contain their underline-indicator), so a badge nested inside one
 // and positioned past its corner gets cut off. Living in document.body and
 // being positioned with absolute page coordinates (computed from the
@@ -22,7 +24,6 @@ const PAGE_BADGE_IDS = {
   actionsTab: "repotools-badge-actions",
   releases: "repotools-badge-releases",
   cloneUrl: "repotools-badge-clone",
-  pagesHint: "repotools-badge-pages-hint",
 };
 
 function injectBadgeStyleOnce() {
@@ -47,12 +48,16 @@ function injectBadgeStyleOnce() {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       white-space: nowrap;
     }
-    .repotools-badge.repotools-badge-muted {
-      background: rgba(110, 118, 129, 0.85);
-      color: #c9d1d9;
-      border-color: rgba(255, 255, 255, 0.35);
-      box-shadow: none;
+    .repotools-pages-hint-item {
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      font-size: 11px;
       font-weight: 600;
+      color: #8b949e;
+      white-space: nowrap;
+      cursor: default;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
   `;
   document.head.appendChild(style);
@@ -64,7 +69,7 @@ function positionBadge(badge, anchor) {
   badge.style.left = `${rect.right + window.scrollX}px`;
 }
 
-function setPageBadge(id, anchor, text, { muted = false } = {}) {
+function setPageBadge(id, anchor, text) {
   let badge = document.getElementById(id);
 
   if (!text || !anchor) {
@@ -78,7 +83,6 @@ function setPageBadge(id, anchor, text, { muted = false } = {}) {
     badge.className = "repotools-badge";
     document.body.appendChild(badge);
   }
-  badge.classList.toggle("repotools-badge-muted", muted);
   badge.textContent = text;
   positionBadge(badge, anchor);
 }
@@ -96,8 +100,8 @@ function repositionAllPageBadges() {
   }
 }
 
-function setPageBadgeTracked(id, anchor, text, opts) {
-  setPageBadge(id, anchor, text, opts);
+function setPageBadgeTracked(id, anchor, text) {
+  setPageBadge(id, anchor, text);
   const badge = document.getElementById(id);
   if (badge) badge._repotoolsAnchor = anchor;
 }
@@ -109,14 +113,14 @@ function buildCloneBadgeText(shortcuts) {
   return parts.join(" ");
 }
 
-function findSettingsAnchor(repo) {
-  // "settings" matches the kebab-case pattern GitHub uses for its other
-  // data-tab-item values, but the tab only renders for repo admins, so we
-  // can't verify the exact attribute without an authenticated session.
-  // Fall back to a plain href match, same approach as the Releases link.
-  const byTabItem = document.querySelector('a[data-tab-item="settings"]');
-  if (byTabItem) return byTabItem;
-  return document.querySelector(`a[href="/${repo.user}/${repo.repo}/settings"]`);
+function findCloneButton() {
+  // The green "Code" button is the page's only primary-variant button;
+  // matching on its icon too guards against that ever not being unique.
+  const buttons = document.querySelectorAll('button[data-variant="primary"]');
+  for (const btn of buttons) {
+    if (btn.querySelector("svg.octicon-code")) return btn;
+  }
+  return null;
 }
 
 function injectReleasesBadge(repo, key, attempt = 0) {
@@ -131,6 +135,38 @@ function injectReleasesBadge(repo, key, attempt = 0) {
   }
   if (attempt >= 6) return;
   setTimeout(() => injectReleasesBadge(repo, key, attempt + 1), 800);
+}
+
+function appendPagesHintItem(toggleKey) {
+  const id = "repotools-pages-hint-item";
+  let item = document.getElementById(id);
+
+  if (!toggleKey) {
+    if (item) item.remove();
+    return;
+  }
+
+  // Found structurally from a tab we already trust, rather than guessing at
+  // a Settings selector (that tab only exists for repo admins, and we can't
+  // verify its data-tab-item value without an authenticated session).
+  const anyTab =
+    document.querySelector('a[data-tab-item="code"]') ||
+    document.querySelector('a[data-tab-item="issues"]');
+  const list = anyTab && anyTab.closest("ul");
+  if (!list) {
+    if (item) item.remove();
+    return;
+  }
+
+  if (!item) {
+    item = document.createElement("li");
+    item.id = id;
+    item.className = "repotools-pages-hint-item";
+    list.appendChild(item);
+  } else if (item.parentElement !== list) {
+    list.appendChild(item);
+  }
+  item.textContent = `${toggleKey} → Pages`;
 }
 
 function injectPageBadges(shortcuts) {
@@ -159,18 +195,9 @@ function injectPageBadges(shortcuts) {
 
   injectReleasesBadge(repo, shortcuts.releases ? shortcuts.releases.toUpperCase() : "");
 
-  setPageBadgeTracked(
-    PAGE_BADGE_IDS.cloneUrl,
-    document.querySelector('a[data-tab-item="code"]'),
-    buildCloneBadgeText(shortcuts)
-  );
+  setPageBadgeTracked(PAGE_BADGE_IDS.cloneUrl, findCloneButton(), buildCloneBadgeText(shortcuts));
 
-  setPageBadgeTracked(
-    PAGE_BADGE_IDS.pagesHint,
-    findSettingsAnchor(repo),
-    shortcuts.toggle ? `${shortcuts.toggle.toUpperCase()} → Pages` : "",
-    { muted: true }
-  );
+  appendPagesHintItem(shortcuts.toggle ? shortcuts.toggle.toUpperCase() : "");
 
   // Catch late layout shifts (web fonts loading, the Releases skeleton
   // resolving to its final size) without a full MutationObserver.

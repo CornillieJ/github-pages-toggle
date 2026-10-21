@@ -46,15 +46,17 @@ These all work whether you're currently on the `github.com` side or the
 ### On-page shortcut badges
 
 On a repo's `github.com` page, RepoTools drops a small badge showing the
-configured key directly onto GitHub's own **Issues**, **Pull requests**,
-**Actions**, and **Code** tabs, plus the sidebar **Releases** link when that
-section is present:
+configured key directly onto GitHub's own **Issues**, **Pull requests**, and
+**Actions** tabs, plus the sidebar **Releases** link when that section is
+present:
 
-- The **Code** tab's badge shows both clone-URL shortcuts together when set,
-  e.g. `C(https) S(ssh)` — only the ones you've actually configured appear.
-- A muted, non-interactive badge next to **Settings** shows the toggle key
-  (e.g. `P → Pages`) as a plain visual reminder, since there's no "Pages" tab
-  in GitHub's own nav to badge directly.
+- The green **Code** button (the clone-URL dropdown) gets a badge showing
+  both clone-URL shortcuts together when set, e.g. `C(https) S(ssh)` — only
+  the ones you've actually configured appear.
+- A plain, non-interactive label (e.g. `P → Pages`) is appended to the end of
+  GitHub's own repo nav, showing the toggle key as a visual reminder — since
+  there's no "Pages" tab in GitHub's nav to badge directly, this rides along
+  as an extra item in that same list instead of floating over anything.
 
 DeepWiki/GitDiagram don't get an on-page badge — there's no GitHub element
 to anchor them to at all.

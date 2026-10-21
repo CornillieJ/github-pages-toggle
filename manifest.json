@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "RepoTools",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "A GitHub repo toolbelt: toggle to its Pages site, copy clone URLs, jump to Issues/PRs/Actions/Releases, and open it in DeepWiki or GitDiagram.",
   "author": "Jeffrey Cornillie",
   "homepage_url": "https://github.com/CornillieJ/repotools",
