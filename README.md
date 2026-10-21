@@ -62,8 +62,11 @@ DeepWiki/GitDiagram don't get an on-page badge — there's no GitHub element
 to anchor them to at all.
 
 The popup's **Badge style** section lets you turn these on-page badges off
-entirely, or pick their color with a color picker — both apply immediately
-to any open GitHub tab.
+entirely, or pick their color from a small preset palette — both apply
+immediately to any open GitHub tab. The color picker is a fixed palette
+rather than a native `<input type="color">` on purpose: that element opens
+the OS color dialog in a separate window, which blurs (and auto-closes) the
+extension popup before a color selection can ever be committed.
 
 Badges update immediately if you change a shortcut in the popup, and survive
 both GitHub's in-app (Turbo) navigation between pages and React re-rendering

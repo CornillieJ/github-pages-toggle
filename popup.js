@@ -161,7 +161,7 @@ document.getElementById("save-shortcuts").addEventListener("click", async () => 
 // --- Badge style ------------------------------------------------------------
 
 const badgeEnabledInput = document.getElementById("badge-enabled");
-const badgeColorInput = document.getElementById("badge-color");
+const colorPalette = document.getElementById("badge-color-palette");
 
 badgeEnabledInput.addEventListener("change", async () => {
   const current = await loadBadgeStyle();
@@ -170,12 +170,25 @@ badgeEnabledInput.addEventListener("change", async () => {
   });
 });
 
-badgeColorInput.addEventListener("input", async () => {
-  const current = await loadBadgeStyle();
-  await browser.storage.local.set({
-    badgeStyle: { ...current, color: badgeColorInput.value },
-  });
-});
+function renderColorPalette(selectedColor) {
+  colorPalette.innerHTML = "";
+  for (const color of BADGE_COLOR_PRESETS) {
+    const swatch = document.createElement("button");
+    swatch.type = "button";
+    swatch.className = "color-swatch";
+    swatch.style.background = color;
+    swatch.title = color;
+    swatch.classList.toggle("selected", color.toLowerCase() === (selectedColor || "").toLowerCase());
+
+    swatch.addEventListener("click", async () => {
+      const current = await loadBadgeStyle();
+      await browser.storage.local.set({ badgeStyle: { ...current, color } });
+      renderColorPalette(color);
+    });
+
+    colorPalette.appendChild(swatch);
+  }
+}
 
 // --- Repo tools / explore --------------------------------------------------
 
@@ -188,7 +201,7 @@ badgeColorInput.addEventListener("input", async () => {
   renderShortcutRows(shortcuts);
   renderKeyBadges(shortcuts);
   badgeEnabledInput.checked = badgeStyle.enabled;
-  badgeColorInput.value = badgeStyle.color;
+  renderColorPalette(badgeStyle.color);
 
   const repo = getRepoInfo(tab.url);
   if (!repo) {
