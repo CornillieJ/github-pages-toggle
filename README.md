@@ -62,7 +62,9 @@ DeepWiki/GitDiagram don't get an on-page badge — there's no GitHub element
 to anchor them to at all.
 
 Badges update immediately if you change a shortcut in the popup, and survive
-GitHub's in-app (Turbo) navigation between pages without a reload.
+both GitHub's in-app (Turbo) navigation between pages and React re-rendering
+parts of the page in place — a debounced `MutationObserver` re-injects them
+whenever the page changes, not just on full navigations.
 
 They float over each tab's top-right corner without modifying any of
 GitHub's own elements or styles — the badges live in `document.body`,

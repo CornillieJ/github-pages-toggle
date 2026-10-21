@@ -16,6 +16,24 @@ browser.storage.onChanged.addListener((changes, area) => {
 // reload, so re-inject badges whenever that happens.
 document.addEventListener("turbo:load", () => injectPageBadges(shortcuts));
 
+// React also re-renders parts of the page in place (e.g. hydration finishing,
+// counters updating) with no "turbo:load" at all, which can silently replace
+// an anchor our badges are tracking. A debounced MutationObserver catches
+// that generically. We disconnect while we write our own badges so that
+// doesn't trigger itself in a loop.
+if (window.location.hostname === "github.com") {
+  let pageBadgeRetimer = null;
+  const pageBadgeObserver = new MutationObserver(() => {
+    clearTimeout(pageBadgeRetimer);
+    pageBadgeRetimer = setTimeout(() => {
+      pageBadgeObserver.disconnect();
+      injectPageBadges(shortcuts);
+      pageBadgeObserver.observe(document.body, { childList: true, subtree: true });
+    }, 200);
+  });
+  pageBadgeObserver.observe(document.body, { childList: true, subtree: true });
+}
+
 document.addEventListener("keydown", (event) => {
   if (event.ctrlKey || event.metaKey || event.altKey) return;
 
