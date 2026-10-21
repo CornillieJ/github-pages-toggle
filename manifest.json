@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "GitHub Pages Toggle",
-  "version": "1.2.0",
-  "description": "Jump between a GitHub repo and its GitHub Pages site with a configurable keyboard shortcut or the toolbar popup.",
+  "name": "RepoTools",
+  "version": "2.0.0",
+  "description": "A GitHub repo toolbelt: toggle to its Pages site, copy clone URLs, jump to Issues/PRs/Actions/Releases, and open it in DeepWiki or GitDiagram.",
   "author": "Jeffrey Cornillie",
   "homepage_url": "https://github.com/CornillieJ/github-pages-toggle",
   "icons": {
@@ -15,7 +15,8 @@
   "permissions": [
     "activeTab",
     "tabs",
-    "storage"
+    "storage",
+    "clipboardWrite"
   ],
   "background": {
     "scripts": ["url-mapper.js", "badge.js", "background.js"],
@@ -33,7 +34,7 @@
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png"
     },
-    "default_title": "Toggle GitHub Pages",
+    "default_title": "RepoTools",
     "default_popup": "popup.html"
   },
   "browser_specific_settings": {

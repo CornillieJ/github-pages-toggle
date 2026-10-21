@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>GitHub Pages Toggle</title>
+<title>RepoTools</title>
 <style>
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-    width: 220px;
+    width: 260px;
     padding: 12px;
     background: #0d1117;
     color: #e6edf3;
@@ -75,6 +75,29 @@
     color: #58a6ff;
     margin-bottom: 8px;
   }
+  .row-2 {
+    display: flex;
+    gap: 8px;
+  }
+  .row-2 button {
+    flex: 1;
+  }
+  .grid-2x2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .grid-2x2 button {
+    margin-bottom: 0;
+  }
+  #repo-tools, #explore {
+    display: none;
+  }
+  #no-repo {
+    font-size: 12px;
+    color: #8b949e;
+    display: none;
+  }
 </style>
 </head>
 <body>
@@ -91,6 +114,32 @@
   <div class="section-title">GitHub &harr; Pages</div>
   <button id="toggle">Switch this tab</button>
   <button id="toggle-new-tab">Open in a new tab</button>
+
+  <div class="divider"></div>
+
+  <div id="repo-tools">
+    <div class="section-title">Repo tools</div>
+    <div class="row-2">
+      <button id="copy-https">Copy HTTPS</button>
+      <button id="copy-ssh">Copy SSH</button>
+    </div>
+    <div class="grid-2x2">
+      <button id="link-issues">Issues</button>
+      <button id="link-prs">Pull requests</button>
+      <button id="link-actions">Actions</button>
+      <button id="link-releases">Releases</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div id="explore">
+      <div class="section-title">Explore elsewhere</div>
+      <button id="link-deepwiki">DeepWiki</button>
+      <button id="link-gitdiagram">GitDiagram</button>
+    </div>
+  </div>
+
+  <p id="no-repo">Open a GitHub repo or its Pages site to use repo tools.</p>
 
   <script src="url-mapper.js"></script>
   <script src="badge.js"></script>

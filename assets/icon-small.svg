@@ -7,11 +7,8 @@
   </defs>
   <rect width="128" height="128" rx="24" fill="url(#bg)"/>
 
-  <!-- lucide "arrow-left-right" (ISC license), bold + large for legibility at 16px -->
-  <g transform="translate(14,37) scale(2.3)" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M8 3 4 7l4 4" stroke="#58a6ff"/>
-    <path d="M4 7h16" stroke="#58a6ff"/>
-    <path d="m16 21 4-4-4-4" stroke="#3fb950"/>
-    <path d="M20 17H4" stroke="#3fb950"/>
+  <!-- lucide "wrench" (ISC license), bold + large for legibility at 16px -->
+  <g transform="translate(18,18) scale(3.7)" fill="none" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" />
   </g>
 </svg>

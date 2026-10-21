@@ -57,6 +57,35 @@ async function togglePagesUrl(href) {
   return stored[info.repoKey] || info.fallbackUrl;
 }
 
+// Resolves the repo owner/name regardless of which side (github.com or the
+// Pages site) the current tab is on, for features that just need "which repo
+// is this" rather than a toggle target.
+function getRepoInfo(href) {
+  let url;
+  try {
+    url = new URL(href);
+  } catch (e) {
+    return null;
+  }
+
+  if (url.hostname === "github.com") {
+    const parts = url.pathname.split("/").filter(Boolean);
+    if (parts.length < 2) return null;
+    const [user, repo] = parts;
+    return { user, repo };
+  }
+
+  if (url.hostname.endsWith(".github.io")) {
+    const user = url.hostname.slice(0, -".github.io".length);
+    if (!user) return null;
+    const parts = url.pathname.split("/").filter(Boolean);
+    const repo = parts.length === 0 ? `${user}.github.io` : parts[0];
+    return { user, repo };
+  }
+
+  return null;
+}
+
 if (typeof module !== "undefined") {
-  module.exports = { analyzeTogglePagesUrl, togglePagesUrl };
+  module.exports = { analyzeTogglePagesUrl, togglePagesUrl, getRepoInfo };
 }

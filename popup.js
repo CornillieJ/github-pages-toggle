@@ -50,3 +50,59 @@ document.getElementById("save").addEventListener("click", async () => {
     savedMsg.style.visibility = "hidden";
   }, 1200);
 });
+
+function openInNewTab(url) {
+  browser.tabs.create({ url });
+}
+
+function flashButtonLabel(button, text, revertAfterMs = 1200) {
+  const original = button.textContent;
+  button.textContent = text;
+  setTimeout(() => {
+    button.textContent = original;
+  }, revertAfterMs);
+}
+
+async function copyToClipboard(button, text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    flashButtonLabel(button, "Copied!");
+  } catch (e) {
+    flashButtonLabel(button, "Copy failed");
+  }
+}
+
+(async () => {
+  const tab = await getActiveTab();
+  const repo = getRepoInfo(tab.url);
+
+  if (!repo) {
+    document.getElementById("no-repo").style.display = "block";
+    return;
+  }
+
+  document.getElementById("repo-tools").style.display = "block";
+  document.getElementById("explore").style.display = "block";
+
+  const { user, repo: repoName } = repo;
+  const repoUrl = `https://github.com/${user}/${repoName}`;
+
+  document.getElementById("copy-https").addEventListener("click", (e) => {
+    copyToClipboard(e.currentTarget, `${repoUrl}.git`);
+  });
+  document.getElementById("copy-ssh").addEventListener("click", (e) => {
+    copyToClipboard(e.currentTarget, `git@github.com:${user}/${repoName}.git`);
+  });
+
+  document.getElementById("link-issues").addEventListener("click", () => openInNewTab(`${repoUrl}/issues`));
+  document.getElementById("link-prs").addEventListener("click", () => openInNewTab(`${repoUrl}/pulls`));
+  document.getElementById("link-actions").addEventListener("click", () => openInNewTab(`${repoUrl}/actions`));
+  document.getElementById("link-releases").addEventListener("click", () => openInNewTab(`${repoUrl}/releases`));
+
+  document.getElementById("link-deepwiki").addEventListener("click", () =>
+    openInNewTab(`https://deepwiki.com/${user}/${repoName}`)
+  );
+  document.getElementById("link-gitdiagram").addEventListener("click", () =>
+    openInNewTab(`https://gitdiagram.com/${user}/${repoName}`)
+  );
+})();
