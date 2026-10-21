@@ -21,6 +21,8 @@ const PAGE_BADGE_IDS = {
   prs: "repotools-badge-prs",
   actionsTab: "repotools-badge-actions",
   releases: "repotools-badge-releases",
+  cloneUrl: "repotools-badge-clone",
+  pagesHint: "repotools-badge-pages-hint",
 };
 
 function injectBadgeStyleOnce() {
@@ -43,6 +45,14 @@ function injectBadgeStyleOnce() {
       z-index: 2147483647;
       pointer-events: none;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      white-space: nowrap;
+    }
+    .repotools-badge.repotools-badge-muted {
+      background: rgba(110, 118, 129, 0.85);
+      color: #c9d1d9;
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: none;
+      font-weight: 600;
     }
   `;
   document.head.appendChild(style);
@@ -54,7 +64,7 @@ function positionBadge(badge, anchor) {
   badge.style.left = `${rect.right + window.scrollX}px`;
 }
 
-function setPageBadge(id, anchor, text) {
+function setPageBadge(id, anchor, text, { muted = false } = {}) {
   let badge = document.getElementById(id);
 
   if (!text || !anchor) {
@@ -68,6 +78,7 @@ function setPageBadge(id, anchor, text) {
     badge.className = "repotools-badge";
     document.body.appendChild(badge);
   }
+  badge.classList.toggle("repotools-badge-muted", muted);
   badge.textContent = text;
   positionBadge(badge, anchor);
 }
@@ -85,10 +96,27 @@ function repositionAllPageBadges() {
   }
 }
 
-function setPageBadgeTracked(id, anchor, text) {
-  setPageBadge(id, anchor, text);
+function setPageBadgeTracked(id, anchor, text, opts) {
+  setPageBadge(id, anchor, text, opts);
   const badge = document.getElementById(id);
   if (badge) badge._repotoolsAnchor = anchor;
+}
+
+function buildCloneBadgeText(shortcuts) {
+  const parts = [];
+  if (shortcuts.copyHttps) parts.push(`${shortcuts.copyHttps.toUpperCase()}(https)`);
+  if (shortcuts.copySsh) parts.push(`${shortcuts.copySsh.toUpperCase()}(ssh)`);
+  return parts.join(" ");
+}
+
+function findSettingsAnchor(repo) {
+  // "settings" matches the kebab-case pattern GitHub uses for its other
+  // data-tab-item values, but the tab only renders for repo admins, so we
+  // can't verify the exact attribute without an authenticated session.
+  // Fall back to a plain href match, same approach as the Releases link.
+  const byTabItem = document.querySelector('a[data-tab-item="settings"]');
+  if (byTabItem) return byTabItem;
+  return document.querySelector(`a[href="/${repo.user}/${repo.repo}/settings"]`);
 }
 
 function injectReleasesBadge(repo, key, attempt = 0) {
@@ -130,6 +158,19 @@ function injectPageBadges(shortcuts) {
   );
 
   injectReleasesBadge(repo, shortcuts.releases ? shortcuts.releases.toUpperCase() : "");
+
+  setPageBadgeTracked(
+    PAGE_BADGE_IDS.cloneUrl,
+    document.querySelector('a[data-tab-item="code"]'),
+    buildCloneBadgeText(shortcuts)
+  );
+
+  setPageBadgeTracked(
+    PAGE_BADGE_IDS.pagesHint,
+    findSettingsAnchor(repo),
+    shortcuts.toggle ? `${shortcuts.toggle.toUpperCase()} → Pages` : "",
+    { muted: true }
+  );
 
   // Catch late layout shifts (web fonts loading, the Releases skeleton
   // resolving to its final size) without a full MutationObserver.
