@@ -1,8 +1,20 @@
 let shortcuts = { toggle: "p" };
 
+function whenWindowLoaded(callback) {
+  if (document.readyState === "complete") {
+    callback();
+  } else {
+    window.addEventListener("load", callback, { once: true });
+  }
+}
+
 loadShortcuts().then((result) => {
   shortcuts = result;
-  injectPageBadges(shortcuts);
+  // Waiting for the full "load" event (not just document_idle, which can
+  // fire before GitHub's client-side hydration has settled) reduces the
+  // chance this first injection races against React replacing the DOM out
+  // from under it before the MutationObserver below is even attached.
+  whenWindowLoaded(() => injectPageBadges(shortcuts));
 });
 
 browser.storage.onChanged.addListener((changes, area) => {
