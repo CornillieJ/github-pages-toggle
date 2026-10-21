@@ -12,20 +12,24 @@ function injectBadgeStyleOnce() {
   if (document.getElementById("repotools-badge-style")) return;
   const style = document.createElement("style");
   style.id = "repotools-badge-style";
+  // Inline (not absolutely positioned) on purpose: GitHub's nav container
+  // clips anything that overflows a tab's own box, so a corner-overlay badge
+  // gets cut off. Appending it as a normal flow child, the same way GitHub's
+  // own issue/PR count bubbles work, avoids that entirely.
   style.textContent = `
     .repotools-badge {
-      position: absolute;
-      top: -6px;
-      right: -6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 6px;
       background: #1f6feb;
       color: #ffffff;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 700;
       line-height: 1;
-      padding: 2px 5px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      z-index: 10;
+      padding: 1px 6px;
+      border-radius: 10px;
+      vertical-align: middle;
       pointer-events: none;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
@@ -40,10 +44,6 @@ function setPageBadge(el, text) {
   if (!text) {
     if (badge) badge.remove();
     return;
-  }
-
-  if (getComputedStyle(el).position === "static") {
-    el.style.position = "relative";
   }
 
   if (!badge) {
