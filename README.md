@@ -43,6 +43,17 @@ https://github.com/<user>/<repo>            https://<user>.github.io/<repo>
 These all work whether you're currently on the `github.com` side or the
 `*.github.io` side of a repo.
 
+### On-page shortcut badges
+
+On a repo's `github.com` page, RepoTools drops a small badge showing the
+configured key directly onto GitHub's own **Issues**, **Pull requests**, and
+**Actions** tabs, plus the sidebar **Releases** link when that section is
+present. Clone URL copy and DeepWiki/GitDiagram don't get an on-page badge —
+there's no single stable GitHub element to anchor them to.
+
+Badges update immediately if you change a shortcut in the popup, and survive
+GitHub's in-app (Turbo) navigation between pages without a reload.
+
 ### Configurable shortcuts
 
 Every action above — the toggle plus every repo tool — can get its own

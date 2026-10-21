@@ -2,13 +2,19 @@ let shortcuts = { toggle: "p" };
 
 loadShortcuts().then((result) => {
   shortcuts = result;
+  injectPageBadges(shortcuts);
 });
 
 browser.storage.onChanged.addListener((changes, area) => {
   if (area === "local" && changes.shortcuts) {
     shortcuts = changes.shortcuts.newValue || { toggle: "p" };
+    injectPageBadges(shortcuts);
   }
 });
+
+// GitHub is a Turbo SPA: most navigation swaps the DOM without a full page
+// reload, so re-inject badges whenever that happens.
+document.addEventListener("turbo:load", () => injectPageBadges(shortcuts));
 
 document.addEventListener("keydown", (event) => {
   if (event.ctrlKey || event.metaKey || event.altKey) return;

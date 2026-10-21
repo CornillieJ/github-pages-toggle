@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "RepoTools",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "A GitHub repo toolbelt: toggle to its Pages site, copy clone URLs, jump to Issues/PRs/Actions/Releases, and open it in DeepWiki or GitDiagram.",
   "author": "Jeffrey Cornillie",
   "homepage_url": "https://github.com/CornillieJ/repotools",
@@ -25,7 +25,7 @@
   "content_scripts": [
     {
       "matches": ["*://github.com/*", "*://*.github.io/*"],
-      "js": ["url-mapper.js", "shortcuts.js", "content.js"],
+      "js": ["url-mapper.js", "shortcuts.js", "page-badges.js", "content.js"],
       "run_at": "document_idle"
     }
   ],
