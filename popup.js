@@ -74,8 +74,19 @@ function renderShortcutRows(shortcuts) {
     const row = document.createElement("div");
     row.className = "shortcut-row";
 
+    const text = document.createElement("div");
+    text.className = "shortcut-text";
+
     const label = document.createElement("span");
+    label.className = "shortcut-label";
     label.textContent = field.label;
+
+    const description = document.createElement("span");
+    description.className = "shortcut-description";
+    description.textContent = field.description;
+
+    text.appendChild(label);
+    text.appendChild(description);
 
     const input = document.createElement("input");
     input.type = "text";
@@ -83,7 +94,7 @@ function renderShortcutRows(shortcuts) {
     input.dataset.field = field.id;
     input.value = shortcuts[field.id] || "";
 
-    row.appendChild(label);
+    row.appendChild(text);
     row.appendChild(input);
     shortcutsList.appendChild(row);
   }

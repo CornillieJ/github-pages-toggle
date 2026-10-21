@@ -6,7 +6,7 @@
 <style>
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-    width: 270px;
+    width: 300px;
     padding: 12px;
     background: #0d1117;
     color: #e6edf3;
@@ -66,19 +66,50 @@
     color: #8b949e;
     display: none;
   }
+  #shortcuts-list {
+    max-height: 250px;
+    overflow-y: auto;
+    margin-bottom: 8px;
+    padding-right: 4px;
+  }
+  #shortcuts-list::-webkit-scrollbar {
+    width: 6px;
+  }
+  #shortcuts-list::-webkit-scrollbar-thumb {
+    background: #30363d;
+    border-radius: 3px;
+  }
   .shortcut-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 6px;
-    font-size: 12px;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid #21262d;
   }
-  .shortcut-row span {
+  .shortcut-row:last-child {
+    border-bottom: none;
+  }
+  .shortcut-text {
+    min-width: 0;
+  }
+  .shortcut-label {
+    display: block;
+    font-size: 12.5px;
     color: #e6edf3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .shortcut-description {
+    display: block;
+    font-size: 10.5px;
+    color: #8b949e;
+    margin-top: 1px;
+    line-height: 1.3;
   }
   .shortcut-row input {
-    width: 28px;
+    width: 26px;
     text-align: center;
     background: #161b22;
     color: #e6edf3;
@@ -88,8 +119,12 @@
     font-size: 13px;
     flex-shrink: 0;
   }
+  .shortcut-row input:focus {
+    outline: none;
+    border-color: #58a6ff;
+  }
   #save-shortcuts {
-    margin-top: 4px;
+    margin-top: 0;
   }
   .saved {
     color: #3fb950;

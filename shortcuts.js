@@ -50,15 +50,51 @@ const REPO_ACTIONS = {
 // REPO_ACTIONS since its behavior lives in url-mapper.js, but it still gets a
 // row here since it's configurable the same way.
 const SHORTCUT_FIELDS = [
-  { id: "toggle", label: "Toggle GitHub ↔ Pages" },
-  { id: "copyHttps", label: REPO_ACTIONS.copyHttps.label },
-  { id: "copySsh", label: REPO_ACTIONS.copySsh.label },
-  { id: "issues", label: REPO_ACTIONS.issues.label },
-  { id: "prs", label: REPO_ACTIONS.prs.label },
-  { id: "actionsTab", label: REPO_ACTIONS.actionsTab.label },
-  { id: "releases", label: REPO_ACTIONS.releases.label },
-  { id: "deepwiki", label: REPO_ACTIONS.deepwiki.label },
-  { id: "gitdiagram", label: REPO_ACTIONS.gitdiagram.label },
+  {
+    id: "toggle",
+    label: "Toggle GitHub ↔ Pages",
+    description: "Jump between this repo and its Pages site",
+  },
+  {
+    id: "copyHttps",
+    label: REPO_ACTIONS.copyHttps.label,
+    description: "Copy the HTTPS git clone URL",
+  },
+  {
+    id: "copySsh",
+    label: REPO_ACTIONS.copySsh.label,
+    description: "Copy the SSH git clone URL",
+  },
+  {
+    id: "issues",
+    label: REPO_ACTIONS.issues.label,
+    description: "Open this repo's Issues tab",
+  },
+  {
+    id: "prs",
+    label: REPO_ACTIONS.prs.label,
+    description: "Open this repo's Pull requests tab",
+  },
+  {
+    id: "actionsTab",
+    label: REPO_ACTIONS.actionsTab.label,
+    description: "Open this repo's Actions tab",
+  },
+  {
+    id: "releases",
+    label: REPO_ACTIONS.releases.label,
+    description: "Open this repo's Releases tab",
+  },
+  {
+    id: "deepwiki",
+    label: REPO_ACTIONS.deepwiki.label,
+    description: "AI-generated wiki & architecture docs",
+  },
+  {
+    id: "gitdiagram",
+    label: REPO_ACTIONS.gitdiagram.label,
+    description: "Interactive system diagram of the repo",
+  },
 ];
 
 // Reads the configured shortcuts, migrating the older single "shortcutKey"
