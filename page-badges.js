@@ -51,7 +51,11 @@ function injectBadgeStyleOnce() {
       position: absolute;
       transform: translate(-50%, -50%);
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-      z-index: 2147483647;
+      /* Just enough to sit above the plain nav tab behind it - deliberately
+         not an extreme value, so GitHub's own dropdowns, search overlays,
+         and modals (which use their own, much higher z-index) still layer
+         above our badges instead of the other way around. */
+      z-index: 1;
       pointer-events: none;
     }
     .repotools-pages-hint-item {
